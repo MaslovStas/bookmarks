@@ -1,0 +1,75 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}{% endblock title %}</title>
+
+	{% bootstrap_css %}
+
+	<link rel="stylesheet" href="{% static 'css/account.css' %}">
+</head>
+<body>
+	{# NavBar #}
+	<nav
+		class="navbar navbar-expand-md navbar-dark bg-dark"
+	>
+		<div class="container-fluid">
+			<a class="navbar-brand" href="{% url 'dashboard' %}">Bookmark</a>
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent"
+				aria-expanded="false"
+				aria-label="Переключатель навигации"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav m-auto mb-2 mb-md-0 fw-bold">
+					<li class="nav-item">
+						<a class="nav-link {% if section == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link {% if section == 'images' %}active{% endif %}" href="{% url 'images:list' %}">Images</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link {% if section == 'people' %}active{% endif %}" href="{% url 'user_list' %}">People</a>
+					</li>
+				</ul>
+				<span class="text-white">
+					{% if request.user.is_authenticated %}
+						{{ request.user.first_name|default:request.user.username }} | 
+						<a href="{% url 'logout' %}">Logout</a>
+					{% else %}
+						<a href="{% url 'login' %}">Login</a>
+					{% endif %}
+				</span>
+			</div>
+		</div>
+	</nav>
+	{# Message #}
+	{% bootstrap_messages %}
+	{# Content #}
+	<div class="container p-5">
+		{% block content %}{% endblock content %}
+	</div>
+
+	{% bootstrap_javascript %}
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+	<script>
+		const csrftoken = Cookies.get('csrftoken')
+		document.addEventListener("DOMContentLoaded", (event) => {
+			// DOM Loaded
+			{% block domready %}
+			{% endblock domready %}
+		})
+	</script>
+</body>
+</html>

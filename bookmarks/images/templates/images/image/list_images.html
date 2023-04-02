@@ -1,0 +1,12 @@
+{% load thumbnail %}
+{% for image in images %}
+	<div class="card" style="width: 18rem;">
+		{% thumbnail image.image 300x300 crop="smart" as im%}
+		<a href="{{ image.get_absolute_url }}">
+			<img class="card-img" src="{{ im.url }}">
+		</a>
+		<div class="card-body">
+			<a class="card-text" href="{{ image.get_absolute_url }}">{{ image.title }}</a>
+		</div>
+	</div>
+{% endfor %}

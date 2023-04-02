@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}LogIn{% endblock title %}
+
+{% block content %}
+
+	<div class="row justify-content-center">
+		{% if form.errors %}
+			<p>Your username and password didn`t match.</p>
+			<p>Please, try again.</p>
+		{% else %}
+		<div class="col-lg-4 col-md-6 col-sm-12">
+			<h2 class="mb-3 text-center">Log-In</h2>
+			<form class="mb-3" method="post">
+				{% csrf_token %}
+				{% bootstrap_form form %}
+				<input type="hidden" name="next" value="{{ next }}">
+				<div class=text-center>
+					{% bootstrap_button button_type="submit" content="Log In" %}
+				</div>
+			</form>
+			<p class="text-center"><a href="{% url 'password_reset' %}">Forgotten your password?</a></p>
+			<p class="text-center">No account? <a href="{% url 'register' %}">Click to Register</a></p>
+		</div>
+		{% endif %}
+	</div>
+
+{% endblock content %}
